@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.web.spring.entity.Board;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-
+ //자동적으로 findAll()...
 }

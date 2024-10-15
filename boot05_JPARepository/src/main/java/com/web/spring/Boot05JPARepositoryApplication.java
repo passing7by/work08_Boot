@@ -47,7 +47,7 @@ public class Boot05JPARepositoryApplication implements CommandLineRunner{
 //		c1.setEmail("jj@google.com");
 //		c1.setPassword("8888");
 //		c1.setRegDate(LocalDateTime.now());
-//		
+		
 //		customRepository.save(c1); //
 		
 		//3. 방금 추가한 사람을 삭제
