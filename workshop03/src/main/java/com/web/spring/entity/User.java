@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,7 +36,8 @@ public class User {
 	private String name;
 	
 	//Product와의 다대다 관계 해소를 위한 조인 테이블 추가
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
+//	@ManyToMany
 	@JoinTable(name = "orderlist",
 			   joinColumns = @JoinColumn(name="user_id"),
 			   inverseJoinColumns = @JoinColumn(name="pro_no"))

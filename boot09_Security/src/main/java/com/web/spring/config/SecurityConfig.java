@@ -28,7 +28,7 @@ public class SecurityConfig {
 	
 	//UserDetailsService빈을 등록하고.. 디비 연결했다 치고.. id, password 정보를 InMemory
 	//properties 설정파일에도 User 정보를 등록했음.... 이럴 때는 UserDetailsService 빈 설정이 우선순위가 높음
-	@Bean //반드시 Bean임을 명시해야 함
+	@Bean //반드시 Bean임을 명시해야 함([UserDetailsService는 맨 처음에 FilterChainProxy에 의해 작동이 시작되고, 이 때 FilterChainProxy는 SpringContainer에서 생성되는 Bean임])
 	public UserDetailsService userDetailsService() {
 		UserDetails user = User.withUsername("security")
 							   .password("{noop}7777") //{noop}을 반드시 작성해야만 작동함
