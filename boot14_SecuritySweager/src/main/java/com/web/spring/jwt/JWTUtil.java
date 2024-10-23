@@ -59,6 +59,15 @@ public class JWTUtil {
         log.info("isExpired(String token)  re  = {}",re);
         return re;
     }
+    
+    //검증 memberNo
+    public Long getMemberNo(String token) {
+        log.info("getMemberNo(String token)  call");
+        Long re = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("memberNo", Long.class);
+        log.info("getMemberNo(String token)  re = {} " , re);
+        return re;
+    }
+    
     //Bearer : JWT 혹은 Oauth에 대한 토큰을 사용
     //public String createJwt(String username, String role, Long expiredMs) {
     //claim은 payload에 해당하는 정보
@@ -68,6 +77,7 @@ public class JWTUtil {
                 .claim("username", member.getName()) //이름
                 .claim("id", member.getId()) //아이디
                 .claim("role", role) //Role
+                .claim("memberNo", member.getMemberNo())
                 .issuedAt(new Date(System.currentTimeMillis())) //현재로그인된 시간
                 .expiration(new Date(System.currentTimeMillis() + expiredMs)) //만료시간
                 .signWith(secretKey)

@@ -14,6 +14,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /*
   무조건 사용자 요청이 들어올때마다 이 필터를 무조건 제일 먼저 들린다.
@@ -21,11 +23,11 @@ import jakarta.servlet.http.HttpServletResponse;
     있으면 --> 토큰이 유효한지를 체크
     없으면 --> 그냥 다음 해야할 필터 또는 Controller 를 실행
  */
+
+@Slf4j
+@RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter { //SecurityFilterChain보다 먼저 통과해야 하는 filter
     private final JWTUtil jwtUtil;
-    public JWTFilter(JWTUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -48,7 +50,9 @@ public class JWTFilter extends OncePerRequestFilter { //SecurityFilterChain보�
         System.out.println("authorization now");
         //Bearer 부분 제거 후 순수 토큰만 획득
         String token = authorization.split(" ")[1];
-			
+        
+        
+        
         //토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
             System.out.println("token expired");
@@ -62,6 +66,8 @@ public class JWTFilter extends OncePerRequestFilter { //SecurityFilterChain보�
         }
 
         //살아있는 토큰이라면 토큰에서 username과 role 획득
+        
+        Long memberNo = jwtUtil.getMemberNo(token);
         String username = jwtUtil.getUsername(token);
         String id = jwtUtil.getId(token);
         String role = jwtUtil.getRole(token);
@@ -71,6 +77,7 @@ public class JWTFilter extends OncePerRequestFilter { //SecurityFilterChain보�
         //인증된 사용자의 정보를 계속해서 유지하려면 서버가 인증된 사용자의 정보를 알고 있어야 한다.
         //예전에는 세션에서 꺼내썼지만 지금은 토큰에서 뽑아서 Claim에 대한 정보를 꺼내서 member객체를 생성
         Member member = new Member();
+        member.setMemberNo(memberNo);
         member.setId(id);
         member.setName(username);
         member.setRole(role);

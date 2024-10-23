@@ -3,12 +3,13 @@ package com.web.spring.controller;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.web.spring.domain.Board;
 import com.web.spring.domain.Member;
 import com.web.spring.dto.BoardReq;
 import com.web.spring.dto.BoardRes;
+import com.web.spring.repository.MemberRepository;
 import com.web.spring.security.CustomMemberDetails;
 import com.web.spring.service.BoardService;
 
@@ -33,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BoardController {
 	private final BoardService boardService;
+	private final MemberRepository memberRepository;
 
 	   /**
 		* 전체 게시물 조회
@@ -82,7 +85,16 @@ public class BoardController {
 		 * 게시물 등록
 		 * */
 		@PostMapping("/boards/board")
-		public ResponseEntity<?> save(@RequestBody BoardReq board){
+		public ResponseEntity<?> save(@AuthenticationPrincipal User user, @RequestBody BoardReq board){
+			Long memberNo1 = user.getMemberNo();
+			log.info("memberNo1 : {}", memberNo1);
+			Long memberNo2 = board.getMemberNo();
+			log.info("memberNo1 : {}", memberNo1);
+			
+//			if (memberNo1 != memberNo2) {
+//				throw new IllegalStateException("권한이 존재하지 않습니다.");
+//			}
+			
 			return new ResponseEntity<>(boardService.addBoard(board),HttpStatus.CREATED);//201
 		}
 
