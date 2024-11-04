@@ -85,15 +85,13 @@ public class BoardController {
 		 * 게시물 등록
 		 * */
 		@PostMapping("/boards/board")
-		public ResponseEntity<?> save(@AuthenticationPrincipal User user, @RequestBody BoardReq board){
-			Long memberNo1 = user.getMemberNo();
-			log.info("memberNo1 : {}", memberNo1);
-			Long memberNo2 = board.getMemberNo();
-			log.info("memberNo1 : {}", memberNo1);
+		public ResponseEntity<?> save(@RequestBody BoardReq board){
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			String name = authentication.getName(); //?
 			
-//			if (memberNo1 != memberNo2) {
-//				throw new IllegalStateException("권한이 존재하지 않습니다.");
-//			}
+			if (name != null && name.equals(name)) {
+				
+			}
 			
 			return new ResponseEntity<>(boardService.addBoard(board),HttpStatus.CREATED);//201
 		}
